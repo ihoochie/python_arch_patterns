@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "python-arch-patterns"
+version = "0.1.0"
+description = ""
+authors = ["ihoochie"]
+readme = "README.md"
+packages = [{include = "python_arch_patterns"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
