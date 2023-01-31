@@ -9,6 +9,7 @@ packages = [{include = "python_arch_patterns"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+sqlalchemy = "^2.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
