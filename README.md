@@ -27,10 +27,20 @@ They are:
 * The _domain_ is a fancy way of saying _the problem you're trying to solve_.
 * The domain is the set of activities that supported by business processes.
 * A model is a map of proces that captures a useful property. It's the mental map that business owners have of their businesses.
-* The terminology used by business stakeholders represents a distilled understanding of the domain model. Complex ideas and processes are boild down to a single word or phrase. We should use that language writing our code.
+* The terminology used by business stakeholders represents a distilled understanding of the domain model. Complex ideas and processes are boiled down to a single word or phrase. We should use that language writing our code.
 * It's a good idea to stick to design principles of encapsulation and layering from the beginning even the domain is small and simple at the time. It will serve well later.
 * A _Value Object_ is any domain object that uniquely identified by the data it holds. It has data, but no identity. We make them immutable.
 * An _Entity_ is a domain object that has long-lived identity.
 * Entities have _identity equality_. We can change attributes, but they still will stay the same things.
 * Not everything has to be an object (at least in Python). It's often better to use functions instead.
 * Domain Model is the best place to apply all good OO design principles.
+
+### Chapter 2: Repository Pattern
+
+* Repository Pattern is a simplifying abstraction over data storage
+  * The domain model should be free of infrastructure concerns, ORM should import the model
+  * The repository is like having a collection of in-memory objects
+  * It's easier to test or swap detail of infrastructure
+* ORM is already an abstraction, but for complex cases is not enough
+* Ports and Adapter, Hexagonal/Onion/Clean architecture - pretty much the same thing relied on [DI Principle](https://blog.ploeh.dk/2013/12/03/layers-onions-ports-adapters-its-all-the-same/)
+* The simplest repository has two methods: add() and get()
