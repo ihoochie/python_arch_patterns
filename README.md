@@ -44,3 +44,19 @@ They are:
 * ORM is already an abstraction, but for complex cases is not enough
 * Ports and Adapter, Hexagonal/Onion/Clean architecture - pretty much the same thing relied on [DI Principle](https://blog.ploeh.dk/2013/12/03/layers-onions-ports-adapters-its-all-the-same/)
 * The simplest repository has two methods: add() and get()
+
+### Chapter 3: Coupling and Abstractions
+
+* Locally, coupling is a good thing - cohesion
+* Globally - it's bad. It increases the risk and the cost of changing the code.
+* We can reduce the degree of coupling by abstracting away the details (I/O, infrastructure)
+* Abstracting state aids testability
+* Mocks does nothing to improve the design
+* Tests with mocks tend to be more coupled to implementation details
+* Overuse of mocks leads to complicated tests that don't explain the code
+* What to read/watch:
+  * https://martinfowler.com/articles/mocksArentStubs.html
+  * https://dannorth.net/introducing-bdd/
+  *  [Edwin Jung - Mocking and Patching Pitfalls - PyCon 2019](https://www.youtube.com/watch?v=Ldlz4V-UCFw)
+  * [Talk: Harry Percival - Stop Using Mocks (for a while)](https://www.youtube.com/watch?v=rk-f3B-eMkI)
+  * [Brandon Rhodes: Hoist Your I/O - PyWaw Summit 2015](https://www.youtube.com/watch?v=PBQN62oUnN8)
