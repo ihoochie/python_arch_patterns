@@ -8,8 +8,11 @@ readme = "README.md"
 packages = [{include = "python_arch_patterns"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.8"
 sqlalchemy = "^2.0.0"
+requests = "^2.28.2"
+flask = "^2.2.2"
+psycopg2-binary = "^2.9.5"
 
 
 [tool.poetry.group.dev.dependencies]
