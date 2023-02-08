@@ -1,5 +1,5 @@
 from sqlalchemy.sql import text
-import model
+from src.allocation.domain import model
 
 
 def test_orderline_mapper_can_load_lines(session):

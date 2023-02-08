@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import date
-from typing import Optional
+from typing import Optional, List
 
 
 @dataclass(unsafe_hash=True)
@@ -57,7 +57,7 @@ class OutOfStock(Exception):
     pass
 
 
-def allocate(line: OrderLine, batches: list[Batch]) -> str:
+def allocate(line: OrderLine, batches) -> str:
     try:
         batch = next(b for b in sorted(batches) if b.can_allocate(line))
         batch.allocate(line)

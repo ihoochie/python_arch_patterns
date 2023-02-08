@@ -60,3 +60,20 @@ They are:
   *  [Edwin Jung - Mocking and Patching Pitfalls - PyCon 2019](https://www.youtube.com/watch?v=Ldlz4V-UCFw)
   * [Talk: Harry Percival - Stop Using Mocks (for a while)](https://www.youtube.com/watch?v=rk-f3B-eMkI)
   * [Brandon Rhodes: Hoist Your I/O - PyWaw Summit 2015](https://www.youtube.com/watch?v=PBQN62oUnN8)
+
+### Chapter 4: Service Layer
+
+* It often makes sense to split out service layer (orchestration or use-case layer)
+* Service layer provides and _application service_. Its job is to handle requests from the outside world and to orchestrate an operation.
+* This layer _drives_ the application by doing simple steps like:
+  * Get come data from database
+  * Update the domain model
+  * Persis any changes
+* This is the kind of boring work that has to happen for every operation in the system, and keeping it separate from business logic.
+* Pros of introducing Service Layer:
+  * Single place to capture all the use cases
+  * Domain logic is behind an API, which makes refactoring easier
+  * Separate HTTP stuff from domain logic stuff
+  * Writing test now easier on the higher level of abstraction, above domain
+* It's not always needed. In some cases it's better to capture all the cases in controllers/views or push logic from controllers to domain model layer
+* It's better to introduce this layer after spotting orchestration logic in controllers.
