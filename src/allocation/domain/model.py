@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import date
-from typing import Optional, List
+from typing import Optional
 
 
 @dataclass(unsafe_hash=True)

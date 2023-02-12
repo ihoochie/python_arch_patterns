@@ -40,6 +40,15 @@ def test_cannot_allocate_if_skus_do_not_match():
     assert batch.can_allocate(line) is False
 
 
+def test_allocation_is_idempotent():
+    batch, line = make_batch_and_line("ELEGANT-LAMP", 20, 2)
+
+    batch.allocate(line)
+    batch.allocate(line)
+
+    assert batch.available_quantity == 18
+
+
 def test_can_only_deallocate_allocated_lines():
     batch, unallocated_line = make_batch_and_line("DECOR-TRINKET", 20, 2)
 
@@ -48,10 +57,8 @@ def test_can_only_deallocate_allocated_lines():
     assert batch.available_quantity == 20
 
 
-def test_allocation_is_idempotent():
-    batch, line = make_batch_and_line("ELEGANT-LAMP", 20, 2)
-
+def test_deallocate():
+    batch, line = make_batch_and_line("EXPENSIVE-FOOTSTOOL", 20, 2)
     batch.allocate(line)
-    batch.allocate(line)
-
-    assert batch.available_quantity == 18
+    batch.deallocate(line)
+    assert batch.available_quantity == 20
