@@ -17,7 +17,6 @@ class AbstractRepository(ABC):
 
 
 class SqlAlchemyRepository(AbstractRepository):
-
     def __init__(self, session):
         self.session = session
 

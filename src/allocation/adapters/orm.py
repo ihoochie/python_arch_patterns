@@ -6,12 +6,12 @@ from src.allocation.domain import model
 mapper_registry = registry()
 
 order_lines = Table(
-    'order_lines',
+    "order_lines",
     mapper_registry.metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('sku', String(255)),
-    Column('qty', Integer, nullable=False),
-    Column('orderid', String(255)),
+    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("sku", String(255)),
+    Column("qty", Integer, nullable=False),
+    Column("orderid", String(255)),
 )
 
 batches = Table(
@@ -39,8 +39,6 @@ def start_mappers():
         model.Batch,
         batches,
         properties={
-            "_allocations": relationship(
-                lines_mapper, secondary=allocations, collection_class=set
-            )
-        }
+            "_allocations": relationship(lines_mapper, secondary=allocations, collection_class=set)
+        },
     )

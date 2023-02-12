@@ -77,3 +77,19 @@ They are:
   * Writing test now easier on the higher level of abstraction, above domain
 * It's not always needed. In some cases it's better to capture all the cases in controllers/views or push logic from controllers to domain model layer
 * It's better to introduce this layer after spotting orchestration logic in controllers.
+
+
+### Chapter 5: TDD in High Gear and Low Gear
+* **The Shifting Gear Metaphor**: we need low gear in the beginning of movement (bike or car), then we go faster, so a higher gear is needed.  
+  Same in projects: in the beginning write test on domain layer and then move it to service layer while the project grows. But if we need some design feedback, it's a good idea to lower "the gear" again.
+* The more low-level (meaning related to implementation and not to abstractions) tests we have, the harder it will be to change things.
+* But we can stick to low-level tests sometimes, because they could drive the design and trigger refactoring. 
+* When we actually want to improve the design of the code, it's better to replace/delete low-level test, because they are coupled to a particular implementation.
+* Hint: if we need to do something from Domain Layer while testing Service Layer, it could be a sign that the Service Layer is incomplete and misses some extra service.
+* Rules of Thumb for tests
+  * One E2E test per feature (happy path)
+  * Most of the tests against the service layer (cover edge cases)
+  * Keep a small core of the domain model tests (they have the highest feedback, but more coupled to implementation)
+  * One Error Handler = One Feature (e2e unhappy paths). In the unit test there will be many unhappy paths.
+* Service Layer should be expressed in terms of primitives (easier to test and maintain)
+* Ideally, we should have all the service in Service Layer to test itself.
