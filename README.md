@@ -93,3 +93,18 @@ They are:
   * One Error Handler = One Feature (e2e unhappy paths). In the unit test there will be many unhappy paths.
 * Service Layer should be expressed in terms of primitives (easier to test and maintain)
 * Ideally, we should have all the service in Service Layer to test itself.
+
+
+### Chapter 6: Unit of Work
+* The Unit of Work pattern is a way to manage the persistence of domain objects.
+* It's an abstraction over the idea of atomic operations
+* UoW is a part of the service layer as a collaborator
+* SqlAlchemy Session is a complex object, it could lead to data access code being spread across the application. UoW is a way to encapsulate it.
+* "Don't mock what you don't own" is a rule of thumb that forces us to build simple abstractions over messy subsystems.
+* Pros:
+  * Nice abstracton over the concept of atomic operations grouped together (with context manager in Python)
+  * Explicit control over when a transaction starts and finishes. It fails in a safe way by default
+  * It's a nice place to put all the repositories so client code can access them
+* Cons:
+  * ORM probably already has a transaction management system. We can use it instead of UoW
+  * We need to be careful with multithreading and nested transactions
