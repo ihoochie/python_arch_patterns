@@ -17,16 +17,17 @@ app = Flask(__name__)
 
 @app.route("/allocate", methods=["POST"])
 def allocate_endpoint():
-    uow = unit_of_work.SqlAlchemyUnitOfWork()
-
     try:
         batchref = services.allocate(
-            request.json["orderid"], request.json["sku"], request.json["qty"], uow
+            request.json["orderid"],
+            request.json["sku"],
+            request.json["qty"],
+            unit_of_work.SqlAlchemyUnitOfWork(),
         )
-    except (model.OutOfStock, services.InvalidSku) as e:
-        return jsonify({"message": str(e)}), 400
+    except services.InvalidSku as e:
+        return {"message": str(e)}, 400
 
-    return jsonify({"batchref": batchref}), 201
+    return {"batchref": batchref}, 201
 
 
 @app.route("/add_batch", methods=["POST"])

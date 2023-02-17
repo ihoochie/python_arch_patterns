@@ -121,3 +121,17 @@ They are:
 * Note on performance: 
   * Sometimes it's better to have a few aggregates with a lot of data than a lot of aggregates with a little data. It's easier to scale.
   * Example in the book: one query to read all the products and one query to persist data.
+
+
+### Chapter 8: Events and the Message Bus
+* Events can help with the single responsibility principle
+* We use events for communication between aggregates
+* A message bus routes messages to handlers. Message bus doesn't know anything about the meaning of events.
+  * Option 1: Service layer raises events and passes them to message bys
+  * Option 2: Domain model raises events, Service layer passes them to message bus (the logic when to raise an event should be in the domain model)
+  * Option 3: UoW collects events from aggregates and passes them to message bus
+* Pros:
+  * A nice way to separate responsibilities when whe have multiple actions in response to a single request
+  * Event handlers are decoupled from the "core" application logic
+  * Domain events are a great way to model the real world
+* Events are simple dataclasses. They dont have behavior.
