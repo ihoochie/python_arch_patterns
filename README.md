@@ -108,3 +108,16 @@ They are:
 * Cons:
   * ORM probably already has a transaction management system. We can use it instead of UoW
   * We need to be careful with multithreading and nested transactions
+
+
+### Chapter 7: Aggregates and Consistency Boundaries
+* An aggregate is a cluster of domain objects that can be treated as a unit. It's like a public method in a class.
+* We modify only one aggregate at a time.
+* An aggregate is a consistency boundary. It's a place where we can enforce consistency rules.
+* An aggregate is a place where we can enforce invariants.
+* Aggregates and concurrency issues go together. We should think about transactions and locks.
+* Dealing with eventual consistency between aggregates can be complex
+* [Optimistic](https://martinfowler.com/eaaCatalog/optimisticOfflineLock.html) and [Pessimistic](https://martinfowler.com/eaaCatalog/pessimisticOfflineLock.html) locking - ways to deal with consistency
+* Note on performance: 
+  * Sometimes it's better to have a few aggregates with a lot of data than a lot of aggregates with a little data. It's easier to scale.
+  * Example in the book: one query to read all the products and one query to persist data.
