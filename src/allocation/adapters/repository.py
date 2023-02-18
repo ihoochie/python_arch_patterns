@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Set
 
+from src.allocation.adapters import orm
 from src.allocation.domain import model
 
 
@@ -18,12 +19,22 @@ class AbstractProductRepository(ABC):
             self.seen.add(product)
         return product
 
+    def get_by_batchref(self, batchref):
+        product = self._get_by_batchref(batchref)
+        if product:
+            self.seen.add(product)
+        return product
+
     @abstractmethod
     def _add(self, product: model.Product):
         raise NotImplementedError
 
     @abstractmethod
     def _get(self, sku) -> model.Product:
+        raise NotImplementedError
+
+    @abstractmethod
+    def _get_by_batchref(self, batchref) -> model.Product:
         raise NotImplementedError
 
 
@@ -37,3 +48,8 @@ class ProductRepository(AbstractProductRepository):
 
     def _get(self, sku):
         return self.session.query(model.Product).filter_by(sku=sku).first()
+
+    def _get_by_batchref(self, batchref):
+        return self.session.query(model.Product).join(model.Batch).filter(
+            orm.batches.c.reference == batchref
+        ).first()

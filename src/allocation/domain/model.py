@@ -23,6 +23,16 @@ class Product:
         self.version_number = version_number
         self.events = []  # type: List[events.Event]
 
+    def change_batch_quantity(self, ref: str, qty: int) -> None:
+        batch = next(b for b in self.batches if b.reference == ref)
+        batch._purchased_quantity = qty
+
+        while batch.available_quantity < 0:
+            line = batch.deallocate_one()
+            self.events.append(
+                events.AllocationRequired(line.orderid, line.sku, line.qty)
+            )
+
     def allocate(self, line: OrderLine) -> str:
         try:
             batch = next(b for b in sorted(self.batches) if b.can_allocate(line))
@@ -67,6 +77,9 @@ class Batch:
     def deallocate(self, line: OrderLine) -> None:
         if line in self._allocations:
             self._allocations.remove(line)
+
+    def deallocate_one(self) -> OrderLine:
+        return self._allocations.pop()
 
     @property
     def allocated_quantity(self) -> int:

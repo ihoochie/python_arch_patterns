@@ -135,3 +135,17 @@ They are:
   * Event handlers are decoupled from the "core" application logic
   * Domain events are a great way to model the real world
 * Events are simple dataclasses. They dont have behavior.
+
+
+### Chapter 9: Going to Town on the Message Bus
+* Events are simple dataclasses that define data structures for inputs.
+* Handlers are the way we react to events. They can call internal services, external services.
+* We can define multiple handlers for the same event.
+* Handler can also raise other events.
+* Pros:
+  * Handlers and services are the same thing - so it's simple.
+  * Nice data structure for inputs
+* Cons:
+  * It's slightly unpredictable. You don't know when things are going to end.
+  * Duplications of fields and structures between model objects and events - it adds maintenance cost.   
+    Adding a new field to the model object means adding it to at least one of the event as well.
