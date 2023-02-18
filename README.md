@@ -149,3 +149,14 @@ They are:
   * It's slightly unpredictable. You don't know when things are going to end.
   * Duplications of fields and structures between model objects and events - it adds maintenance cost.   
     Adding a new field to the model object means adding it to at least one of the event as well.
+
+
+### Chapter 10: Commands and Command Handler
+* Commands are sent by one actor to another specific actor to perfom a specific action.
+* Commands capture _intent_.
+* Events are broadcast by an actor to all interested listeners.
+* We name events with past-tense verbs, commands with imperative mood.
+* Events capture _facts_ about things that have happened.
+* Command should modify a single aggregate.
+* Some additional actions can be triggered by a command via events
+* We don't require the event handlers to succeed in order for the command to be successful.
