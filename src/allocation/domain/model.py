@@ -1,6 +1,7 @@
+from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date
-from typing import Optional, List
+from typing import Optional, List, Union
 
 from src.allocation.domain import events, commands
 
@@ -17,29 +18,36 @@ class OrderLine:
 
 
 class Product:
-    def __init__(self, sku: str, batches, version_number: int = 0):
+    def __init__(self, sku: str, batches: List[Batch], version_number: int = 0):
         self.sku = sku
         self.batches = batches
         self.version_number = version_number
-        self.events = []  # type: List[events.Event]
-
-    def change_batch_quantity(self, ref: str, qty: int):
-        batch = next(b for b in self.batches if b.reference == ref)
-        batch._purchased_quantity = qty
-
-        while batch.available_quantity < 0:
-            line = batch.deallocate_one()
-            self.events.append(commands.Allocate(line.orderid, line.sku, line.qty))
+        self.events = []  # type: List[Union[events.Event, commands.Command]]
 
     def allocate(self, line: OrderLine) -> str:
         try:
             batch = next(b for b in sorted(self.batches) if b.can_allocate(line))
             batch.allocate(line)
             self.version_number += 1
+            self.events.append(
+                events.Allocated(
+                    orderid=line.orderid,
+                    sku=line.sku,
+                    qty=line.qty,
+                    batchref=batch.reference,
+                )
+            )
             return batch.reference
         except StopIteration:
             self.events.append(events.OutOfStock(line.sku))
             return None
+
+    def change_batch_quantity(self, ref: str, qty: int):
+        batch = next(b for b in self.batches if b.reference == ref)
+        batch._purchased_quantity = qty
+        while batch.available_quantity < 0:
+            line = batch.deallocate_one()
+            self.events.append(commands.Allocate(line.orderid, line.sku, line.qty))
 
 
 class Batch:
