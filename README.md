@@ -170,7 +170,11 @@ They are:
 * But the overall flows of information are harder to see
 * Eventual consistency is a new concept to deal with
 * It's a good idea to keep distinction between internal and external events clear.
+* Outbound events are one of the places it's important to apply validation.
 * What to read/watch
   * [The Many Meanings of Event-Driven Architecture • Martin Fowler](https://www.youtube.com/watch?v=STKCRSUsyP0)
   * [Eventsourcing 101](https://www.youtube.com/watch?v=0l8vuYaaBUs)
   * https://connascence.io/
+
+### Chapeter 12: 
+* N + 1 problem: https://secure.phabricator.com/book/phabcontrib/article/n_plus_one/

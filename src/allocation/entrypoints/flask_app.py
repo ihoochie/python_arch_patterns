@@ -1,10 +1,10 @@
 from datetime import date, datetime
 
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from src.allocation import config
+from src.allocation import config, views
 from src.allocation.domain import events, commands
 from src.allocation.adapters import orm
 from src.allocation.service_layer import handlers, unit_of_work, messagebus
@@ -41,3 +41,12 @@ def add_batch():
     )
     messagebus.handle(event, unit_of_work.SqlAlchemyUnitOfWork())
     return "OK", 201
+
+
+@app.route("/allocations/<orderid>", methods=["GET"])
+def allocations_view_endpoint(orderid):
+    uow = unit_of_work.SqlAlchemyUnitOfWork()
+    result = views.allocations(orderid, uow)
+    if not result:
+        return "not found", 404
+    return jsonify(result), 200
