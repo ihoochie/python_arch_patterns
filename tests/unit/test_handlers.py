@@ -2,9 +2,8 @@
 from datetime import date
 from unittest import mock
 import pytest
-
 from src.allocation.adapters import repository
-from src.allocation.domain import events, commands
+from src.allocation.domain import commands, events
 from src.allocation.service_layer import handlers, messagebus, unit_of_work
 
 
@@ -54,8 +53,14 @@ class TestAddBatch:
         assert "b2" in [b.reference for b in uow.products.get("GARISH-RUG").batches]
 
 
+@pytest.fixture(autouse=True)
+def fake_redis_publish():
+    with mock.patch("src.allocation.adapters.redis_event_publisher.publish"):
+        yield
+
+
 class TestAllocate:
-    def test_returns_allocation(self):
+    def test_allocates(self):
         uow = FakeUnitOfWork()
         messagebus.handle(
             commands.CreateBatch("batch1", "COMPLICATED-LAMP", 100, None), uow
@@ -64,30 +69,32 @@ class TestAllocate:
             commands.Allocate("o1", "COMPLICATED-LAMP", 10), uow
         )
         assert results.pop(0) == "batch1"
+        [batch] = uow.products.get("COMPLICATED-LAMP").batches
+        assert batch.available_quantity == 90
 
     def test_errors_for_invalid_sku(self):
         uow = FakeUnitOfWork()
         messagebus.handle(commands.CreateBatch("b1", "AREALSKU", 100, None), uow)
 
         with pytest.raises(handlers.InvalidSku, match="Invalid sku NONEXISTENTSKU"):
-            messagebus.handle(
-                commands.Allocate("o1", "NONEXISTENTSKU", 10), uow
-            )
+            messagebus.handle(commands.Allocate("o1", "NONEXISTENTSKU", 10), uow)
 
     def test_commits(self):
         uow = FakeUnitOfWork()
-        messagebus.handle(commands.CreateBatch("b1", "OMINOUS-MIRROR", 100, None), uow)
+        messagebus.handle(
+            commands.CreateBatch("b1", "OMINOUS-MIRROR", 100, None), uow
+        )
         messagebus.handle(commands.Allocate("o1", "OMINOUS-MIRROR", 10), uow)
         assert uow.committed
 
     def test_sends_email_on_out_of_stock_error(self):
         uow = FakeUnitOfWork()
-        messagebus.handle(commands.CreateBatch("b1", "POPULAR-CURTAINS", 9, None), uow)
+        messagebus.handle(
+            commands.CreateBatch("b1", "POPULAR-CURTAINS", 9, None), uow
+        )
 
         with mock.patch("src.allocation.adapters.email.send") as mock_send_mail:
-            messagebus.handle(
-                commands.Allocate("o1", "POPULAR-CURTAINS", 10), uow
-            )
+            messagebus.handle(commands.Allocate("o1", "POPULAR-CURTAINS", 10), uow)
             assert mock_send_mail.call_args == mock.call(
                 "stock@made.com", f"Out of stock for POPULAR-CURTAINS"
             )
@@ -108,14 +115,14 @@ class TestChangeBatchQuantity:
 
     def test_reallocates_if_necessary(self):
         uow = FakeUnitOfWork()
-        event_history = [
+        history = [
             commands.CreateBatch("batch1", "INDIFFERENT-TABLE", 50, None),
             commands.CreateBatch("batch2", "INDIFFERENT-TABLE", 50, date.today()),
             commands.Allocate("order1", "INDIFFERENT-TABLE", 20),
             commands.Allocate("order2", "INDIFFERENT-TABLE", 20),
         ]
-        for e in event_history:
-            messagebus.handle(e, uow)
+        for msg in history:
+            messagebus.handle(msg, uow)
         [batch1, batch2] = uow.products.get(sku="INDIFFERENT-TABLE").batches
         assert batch1.available_quantity == 10
         assert batch2.available_quantity == 50
