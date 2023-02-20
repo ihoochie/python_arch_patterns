@@ -188,3 +188,19 @@ They are:
 * It's OK to use raw SQL for reads.
 * We can update the read model using events.
 * Sometimes, we can use write models for reads when it fits well. So, using domain model is also fine.
+
+
+### Chapter 13: Dependency Injection (and Bootstrapping)
+* Passing dependencies around could be a pain. We can use dependency injection to make it easier.
+* Setting up dependency injection is one of many activities needed to bootstrap the application.
+* A dependency injection framework is a way to manage dependencies. Good examples:
+  * [Dependency Injector](https://python-dependency-injector.ets-labs.org/)
+  * [panq](https://github.com/bobthemighty/punq)
+* An article about DI Containers without frameworks: https://blog.ploeh.dk/2012/11/06/WhentouseaDIContainer/
+* DI and Bootstrap summary:
+  * Define your API using an ABC.
+  * Implement the real thing.
+  * Build a fake and use it for unit/service-layer/handler tests.
+  * Find a less fake version you can put into your Docker environment.
+  * Test the less fake "real" thing.
+  * Profit!

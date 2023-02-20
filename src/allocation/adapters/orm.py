@@ -54,7 +54,9 @@ def start_mappers():
         model.Batch,
         batches,
         properties={
-            "_allocations": relationship(lines_mapper, secondary=allocations, collection_class=set)
+            "_allocations": relationship(
+                lines_mapper, secondary=allocations, collection_class=set
+            )
         },
     )
     mapper_registry.map_imperatively(
