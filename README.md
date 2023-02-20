@@ -176,5 +176,15 @@ They are:
   * [Eventsourcing 101](https://www.youtube.com/watch?v=0l8vuYaaBUs)
   * https://connascence.io/
 
-### Chapeter 12: 
-* N + 1 problem: https://secure.phabricator.com/book/phabcontrib/article/n_plus_one/
+### Chapeter 12: Command-Query Responsibility Segregation (CQRS)
+* Reads (queries) and writes (commands) are different things, so they should be handled differently.
+* With writes, we want to be sure that the data is consistent and that the operation is atomic.
+* With reads, we want to be fast and we don't care that much about consistency.
+* It's OK to trade performance for consistency on the read side, because stale data is essentially unavoidable.
+* [N + 1 problem](https://secure.phabricator.com/book/phabcontrib/article/n_plus_one/)
+* SQLAlchemy is good at avoiding N+1 problem - see documentation on different types of loading (eager, lazy, joined, subquery)
+* Splitting out reads and writes into separate services is a good idea, even if we don't fully apply CQRS.
+* For reads, we can add denormalized views, build read replicas or add caching layers.
+* It's OK to use raw SQL for reads.
+* We can update the read model using events.
+* Sometimes, we can use write models for reads when it fits well. So, using domain model is also fine.
