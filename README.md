@@ -204,3 +204,30 @@ They are:
   * Find a less fake version you can put into your Docker environment.
   * Test the less fake "real" thing.
   * Profit!
+
+### Validation
+* Validation is about creating _preconditions_
+* Postel's (robustness principle): "Be liberal in what you accept, and conservative in what you emit".
+* [Tolerant Reader](https://martinfowler.com/bliki/TolerantReader.html)
+* Useful categories of validations:
+  * syntax: the structure of the message
+  * semantics: the meaningfulness of the message
+  * pragmatics: the context of the message (business logic)
+* Validate at the edges when possible
+* Ony validate what you require
+* Spend time writing helpers for validation (declarative way)
+* Locate each of three types of validations in the right place (e. g. semantics in the service layer)
+
+### Other notes
+* Architecture Tax
+* Strangler Fig Pattern - building a new system around an old one
+* Event Interception - a way to add new functionality to an existing system
+  * Raise events to represent the changes in a system you want to replace
+  * Build a second system that consumes those events and uses them to build its own domain model
+  * Replace the old system with the new one
+* www.eventmodeling.org, www.eventstorming.org
+* [What You Want Is What You Don’t: Understanding Trade-Offs in Distributed Messaging](https://bravenewgeek.com/what-you-want-is-what-you-dont-understanding-trade-offs-in-distributed-messaging/)
+* [You Cannot Have Exactly-Once Delivery](https://bravenewgeek.com/you-cannot-have-exactly-once-delivery/)
+* [How To Ensure Idempotency In An Eventual Consistent DDD/CQRS Application](https://blog.sapiensworks.com/post/2015/08/26/How-To-Ensure-Idempotency)
+* [(Un) Reliability in messaging: idempotency and de-duplication](https://lostechies.com/jimmybogard/2013/06/03/un-reliability-in-messaging-idempotency-and-de-duplication/)
+* [Clean Architectures in Python](https://leanpub.com/clean-architectures-in-python)
